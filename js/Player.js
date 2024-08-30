@@ -1,5 +1,7 @@
 const MAX_VEL = 1000;
 const BORDER_RAD = 15_000;
+const PARTICLE_LIMIT = 100;
+const PARTICLE_INTERVAL = 100; // ms
 
 export default class Player {
     constructor(x, y, a) {
@@ -8,6 +10,9 @@ export default class Player {
         this.a = a * (Math.PI / 180);
         this.vx = 0;
         this.vy = 0;
+
+        this.partTimer = 0;
+        this.particles = [];
     }
 
     rotate(n) {
@@ -35,14 +40,25 @@ export default class Player {
             this.x -= Math.sign(this.x);
             this.y -= Math.sign(this.y);
         }
+
+        if (this.partTimer >= PARTICLE_INTERVAL) {
+            this.partTimer = 0;
+            this.particles.push([this.x, this.y]);
+            if (this.particles.length > PARTICLE_LIMIT) this.particles.shift();
+        } else this.partTimer += dt * 1000; // make it miliseconds
     }
 
     render() {
-        const x = gfx.width/2;
-        const y = gfx.height/2;
+        // center x/y
+        const cx = gfx.width/2;
+        const cy = gfx.height/2;
 
-        gfx.circle(x, y, 10, "#00ff00", false, 2);
-        gfx.line(x, y, x + Math.cos(this.a) * 10, y + Math.sin(this.a) * 10, "#ff0000", 2);
+        this.particles.forEach(([x, y]) => {
+            gfx.rect(cx - this.x + x, cy - this.y + y, 2, 2, "#ddd");
+        });
+
+        gfx.circle(cx, cy, 10, "#00ff00", false, 2);
+        gfx.line(cx, cy, cx + Math.cos(this.a) * 13, cy + Math.sin(this.a) * 13, "#ff0000", 2);
     }
 }
 
