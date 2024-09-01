@@ -1,6 +1,15 @@
 import Player from "./Player.js";
 import Planet from "./Planet.js";
 
+const loadFont = async () => {
+    const fnt = new FontFace("UbuntuMono", "url(/UbuntuMono-Regular.ttf)", {
+        style: "normal",
+        weight: 400,
+    });
+    await fnt.load();
+    document.fonts.add(fnt);
+}
+
 let player;
 const objects = [];
 
@@ -12,7 +21,21 @@ const random = (max, min = 0) => {
     return min + Math.random() * (max - min);
 }
 
+const renderUi = () => {
+    gfx.font(16, "UbuntuMono");
+    gfx.text("Controls: w&s - move, a&d - rotate", 20, 20, "#d6d6d6");
+
+    gfx.font(24, "UbuntuMono");
+    let textLoc = gfx.height / 8 * 7;
+    const fmt = (n) => ((Math.sign(n) == -1 ? '-' : '+') + Math.abs(n.toFixed(0))).padStart(5); // "%+5d" - C equivalent
+    const vel = Math.sqrt(player.vx*player.vx + player.vy*player.vy);
+
+    gfx.text(`POS: <${fmt(player.x)}, ${fmt(player.y)}>`, 20, textLoc, "#ffffff");
+    gfx.text(`VEL: ${vel.toFixed(2).padStart(5)}`, 20, textLoc + 24, "#ffffff");
+}
+
 gfx.start = () => {
+    loadFont();
     player = new Player(0, 0, 0);
     for (let i = 0; i < 20; i++) {
         const x = random(10_000, -10_000);
@@ -48,19 +71,9 @@ gfx.render = () => {
         gfx.line(0, y, gfx.width, y, "#6b6b6b");
     }
 
-    // Objects
     objects.forEach(o => o.render(player));
-    
-    // Player
     player.render();
-
-    // TODO: make this better
-    gfx.font(12, "system-ui");
-    gfx.text("Controls: w&s - move, a&d - rotate", 20, 20, "#d6d6d6");
-    gfx.font(24, "system-ui");
-    gfx.text(`X: ${player.x.toFixed(2)}`, 20, gfx.height / 8 * 7, "#ffffff");
-    gfx.text(`Y: ${player.y.toFixed(2)}`, 20, gfx.height / 8 * 7 + 24, "#ffffff");
-    gfx.text(`V: ${Math.sqrt(player.vx*player.vx + player.vy*player.vy).toFixed(2)}`, 20, gfx.height / 8 * 7 + 24*2, "#ffffff");
+    renderUi();
 }
 
 gfx.init();

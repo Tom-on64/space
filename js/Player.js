@@ -59,8 +59,10 @@ export default class Player {
         });
 
         // Player
-        gfx.circle(cx, cy, 15, "#00ff00", false, 2);
-        gfx.line(cx, cy, cx + Math.cos(this.a) * 17, cy + Math.sin(this.a) * 17, "#ff0000", 2);
+        const r = 15
+        gfx.circle(cx, cy, r, "#00ff00", false, 2);
+        gfx.circle(cx, cy, r, "#00ff0055");
+        gfx.line(cx, cy, cx + Math.cos(this.a) * (r+4), cy + Math.sin(this.a) * (r+4), "#ff0000", 2);
 
         // Border
         gfx.circle(cx - this.x, cy - this.y, BORDER_RAD, "#e8230077", false, 8);
