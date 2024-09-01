@@ -25,10 +25,10 @@ gfx.start = () => {
 
 gfx.update = (dt) => {
     objects.forEach(o => o.update(player));
-    if (gfx.input.keys["w"]) player.move(SPEED * dt);
-    if (gfx.input.keys["s"]) player.move(-SPEED * dt);
-    if (gfx.input.keys["a"]) player.rotate(-ROT_SPEED * dt);
-    if (gfx.input.keys["d"]) player.rotate(ROT_SPEED * dt);
+    if    (gfx.input.keys["w"] || gfx.input.keys["ArrowUp"]) player.move(SPEED * dt);
+    if  (gfx.input.keys["s"] || gfx.input.keys["ArrowDown"]) player.move(-SPEED * dt);
+    if  (gfx.input.keys["a"] || gfx.input.keys["ArrowLeft"]) player.rotate(-ROT_SPEED * dt);
+    if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
 
     player.update(dt);
 }
@@ -47,7 +47,6 @@ gfx.render = () => {
         const y = i * GRID_GAP - (player.y % GRID_GAP);
         gfx.line(0, y, gfx.width, y, "#6b6b6b");
     }
-
 
     // Objects
     objects.forEach(o => o.render(player));

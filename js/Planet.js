@@ -29,7 +29,8 @@ export default class Planet extends Obj {
     }
 
     draw(cx, cy) {
-        gfx.circle(cx, cy, this.r, this.c, false, 4)
+        gfx.circle(cx, cy, this.r, this.c, false, 4);
+        gfx.circle(cx, cy, this.r, this.c + "66"); // Transparent
     }
 }
 
