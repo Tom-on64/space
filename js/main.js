@@ -1,5 +1,5 @@
 import Player from "./Player.js";
-import Obj from "./Object.js";
+import Planet from "./Planet.js";
 
 let player;
 const objects = [];
@@ -18,12 +18,13 @@ gfx.start = () => {
         const x = random(10_000, -10_000);
         const y = random(10_000, -10_000);
         const r = random(800, 300);
-        objects.push(new Obj(x, y, r, "#00ffff"));
+        objects.push(new Planet(x, y, r, "#00ffff"));
     }
-    objects.push(new Obj(0, 0, 15_000, "#ff0000"));
+    // objects.push(new Obj(0, 0, 15_000, "#ff0000")); // TODO: draw border
 }
 
 gfx.update = (dt) => {
+    objects.forEach(o => o.update(player));
     if (gfx.input.keys["w"]) player.move(SPEED * dt);
     if (gfx.input.keys["s"]) player.move(-SPEED * dt);
     if (gfx.input.keys["a"]) player.rotate(-ROT_SPEED * dt);
