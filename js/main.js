@@ -6,7 +6,7 @@ const objects = [];
 
 const SPEED = 200;
 const ROT_SPEED = 180;
-const GRID_GAP = 350;
+const GRID_GAP = 300;
 
 const random = (max, min = 0) => {
     return min + Math.random() * (max - min);
@@ -59,9 +59,9 @@ gfx.render = () => {
     gfx.font(12, "system-ui");
     gfx.text("Controls: w&s - move, a&d - rotate", 20, 20, "#d6d6d6");
     gfx.font(24, "system-ui");
-    gfx.text(`X: ${Math.floor(player.x)}`, 20, gfx.height / 8 * 7, "#ffffff");
-    gfx.text(`Y: ${Math.floor(player.y)}`, 20, gfx.height / 8 * 7 + 24, "#ffffff");
-    gfx.text(`V: ${Math.floor(Math.abs(player.vx) + Math.abs(player.vy))}`, 20, gfx.height / 8 * 7 + 24*2, "#ffffff");
+    gfx.text(`X: ${player.x.toFixed(2)}`, 20, gfx.height / 8 * 7, "#ffffff");
+    gfx.text(`Y: ${player.y.toFixed(2)}`, 20, gfx.height / 8 * 7 + 24, "#ffffff");
+    gfx.text(`V: ${Math.sqrt(player.vx*player.vx + player.vy*player.vy).toFixed(2)}`, 20, gfx.height / 8 * 7 + 24*2, "#ffffff");
 }
 
 gfx.init();

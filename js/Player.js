@@ -1,4 +1,4 @@
-const MAX_VEL = 1000;
+const MAX_VEL = 2000;
 const BORDER_RAD = 15_000;
 const PARTICLE_LIMIT = 100;
 const PARTICLE_INTERVAL = 100; // ms
@@ -53,12 +53,17 @@ export default class Player {
         const cx = gfx.width/2;
         const cy = gfx.height/2;
 
+        // Particles
         this.particles.forEach(([x, y]) => {
             gfx.rect(cx - this.x + x, cy - this.y + y, 2, 2, "#ddd");
         });
 
-        gfx.circle(cx, cy, 10, "#00ff00", false, 2);
-        gfx.line(cx, cy, cx + Math.cos(this.a) * 13, cy + Math.sin(this.a) * 13, "#ff0000", 2);
+        // Player
+        gfx.circle(cx, cy, 15, "#00ff00", false, 2);
+        gfx.line(cx, cy, cx + Math.cos(this.a) * 17, cy + Math.sin(this.a) * 17, "#ff0000", 2);
+
+        // Border
+        gfx.circle(cx - this.x, cy - this.y, BORDER_RAD, "#e8230077", false, 8);
     }
 }
 
