@@ -29,6 +29,16 @@ gfx.update = (dt) => {
     if  (gfx.input.keys["s"] || gfx.input.keys["ArrowDown"]) player.move(-SPEED * dt);
     if  (gfx.input.keys["a"] || gfx.input.keys["ArrowLeft"]) player.rotate(-ROT_SPEED * dt);
     if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
+    // Mouse move
+    if (gfx.input.mouse.left) {
+        player.move(SPEED * dt);
+        const x = gfx.input.mouse.cx - gfx.input.mouse.x;
+        const y = gfx.input.mouse.cy - gfx.input.mouse.y;
+        //const a = Math.acos(y/Math.sqrt(x*x+y*y));
+        const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
+
+        player.a = a;
+    }
 
     player.update(dt);
 }
@@ -53,6 +63,17 @@ gfx.render = () => {
     
     // Player
     player.render();
+
+    // Mouse thing
+    if (gfx.input.mouse.left) {
+
+        gfx.line(gfx.input.mouse.cx, gfx.input.mouse.cy,
+            gfx.input.mouse.x,// + Math.cos(a) * 100,
+            gfx.input.mouse.y,// + Math.sin(a) * 100,
+            "blue")
+        gfx.circle(gfx.input.mouse.x, gfx.input.mouse.y, 10, "red");
+        gfx.circle(gfx.input.mouse.cx, gfx.input.mouse.cy, 10, "green");
+    }
 
     // TODO: make this better
     gfx.font(12, "system-ui");
