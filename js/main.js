@@ -20,7 +20,6 @@ gfx.start = () => {
         const r = random(800, 300);
         objects.push(new Planet(x, y, r, "#00ffff"));
     }
-    // objects.push(new Obj(0, 0, 15_000, "#ff0000")); // TODO: draw border
 }
 
 gfx.update = (dt) => {
@@ -34,7 +33,6 @@ gfx.update = (dt) => {
         player.move(SPEED * dt);
         const x = gfx.input.mouse.cx - gfx.input.mouse.x;
         const y = gfx.input.mouse.cy - gfx.input.mouse.y;
-        //const a = Math.acos(y/Math.sqrt(x*x+y*y));
         const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
 
         player.a = a;
@@ -66,13 +64,15 @@ gfx.render = () => {
 
     // Mouse thing
     if (gfx.input.mouse.left) {
-
-        gfx.line(gfx.input.mouse.cx, gfx.input.mouse.cy,
-            gfx.input.mouse.x,// + Math.cos(a) * 100,
-            gfx.input.mouse.y,// + Math.sin(a) * 100,
-            "blue")
-        gfx.circle(gfx.input.mouse.x, gfx.input.mouse.y, 10, "red");
-        gfx.circle(gfx.input.mouse.cx, gfx.input.mouse.cy, 10, "green");
+        const x = gfx.input.mouse.cx - gfx.input.mouse.x;
+        const y = gfx.input.mouse.cy - gfx.input.mouse.y;
+        const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
+        const r = Math.sqrt(x*x+y*y);
+        gfx.line(
+            gfx.input.mouse.cx, gfx.input.mouse.cy, 
+            gfx.input.mouse.x, gfx.input.mouse.y,
+            "#00ff00");
+        gfx.circle(gfx.input.mouse.cx, gfx.input.mouse.cy, r, "#00ff00", false, 2);
     }
 
     // TODO: make this better
