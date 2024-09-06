@@ -30,12 +30,15 @@ gfx.update = (dt) => {
     if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
     // Mouse move
     if (gfx.input.mouse.left) {
-        player.move(SPEED * dt);
         const x = gfx.input.mouse.cx - gfx.input.mouse.x;
         const y = gfx.input.mouse.cy - gfx.input.mouse.y;
         const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
+        let nlen = Math.sqrt(x*x + y*y);
+        if (nlen > 300) nlen = 300;
+        nlen /= 300;
 
         player.a = a;
+        player.move(SPEED * dt * nlen);
     }
 
     player.update(dt);
@@ -67,7 +70,9 @@ gfx.render = () => {
         const x = gfx.input.mouse.cx - gfx.input.mouse.x;
         const y = gfx.input.mouse.cy - gfx.input.mouse.y;
         const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
-        const r = Math.sqrt(x*x+y*y);
+        let r = Math.sqrt(x*x+y*y);
+        if (r > 300) r = 300;
+
         gfx.line(
             gfx.input.mouse.cx, gfx.input.mouse.cy, 
             gfx.input.mouse.x, gfx.input.mouse.y,
