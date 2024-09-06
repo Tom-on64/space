@@ -43,7 +43,6 @@ gfx.start = () => {
         const r = random(800, 300);
         objects.push(new Planet(x, y, r, "#00ffff"));
     }
-    // objects.push(new Obj(0, 0, 15_000, "#ff0000")); // TODO: draw border
 }
 
 gfx.update = (dt) => {
@@ -52,6 +51,18 @@ gfx.update = (dt) => {
     if  (gfx.input.keys["s"] || gfx.input.keys["ArrowDown"]) player.move(-SPEED * dt);
     if  (gfx.input.keys["a"] || gfx.input.keys["ArrowLeft"]) player.rotate(-ROT_SPEED * dt);
     if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
+    // Mouse move
+    if (gfx.input.mouse.left) {
+        const x = gfx.input.mouse.cx - gfx.input.mouse.x;
+        const y = gfx.input.mouse.cy - gfx.input.mouse.y;
+        const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
+        let nlen = Math.sqrt(x*x + y*y);
+        if (nlen > 300) nlen = 300;
+        nlen /= 300;
+
+        player.a = a;
+        player.move(SPEED * dt * nlen);
+    }
 
     player.update(dt);
 }
@@ -73,7 +84,33 @@ gfx.render = () => {
 
     objects.forEach(o => o.render(player));
     player.render();
+<<<<<<< HEAD
     renderUi();
+=======
+
+    // Mouse thing
+    if (gfx.input.mouse.left) {
+        const x = gfx.input.mouse.cx - gfx.input.mouse.x;
+        const y = gfx.input.mouse.cy - gfx.input.mouse.y;
+        const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
+        let r = Math.sqrt(x*x+y*y);
+        if (r > 300) r = 300;
+
+        gfx.line(
+            gfx.input.mouse.cx, gfx.input.mouse.cy, 
+            gfx.input.mouse.x, gfx.input.mouse.y,
+            "#00ff00");
+        gfx.circle(gfx.input.mouse.cx, gfx.input.mouse.cy, r, "#00ff00", false, 2);
+    }
+
+    // TODO: make this better
+    gfx.font(12, "system-ui");
+    gfx.text("Controls: w&s - move, a&d - rotate", 20, 20, "#d6d6d6");
+    gfx.font(24, "system-ui");
+    gfx.text(`X: ${player.x.toFixed(2)}`, 20, gfx.height / 8 * 7, "#ffffff");
+    gfx.text(`Y: ${player.y.toFixed(2)}`, 20, gfx.height / 8 * 7 + 24, "#ffffff");
+    gfx.text(`V: ${Math.sqrt(player.vx*player.vx + player.vy*player.vy).toFixed(2)}`, 20, gfx.height / 8 * 7 + 24*2, "#ffffff");
+>>>>>>> 31b489628ee8528f34056f35da5bc8101ccb710f
 }
 
 gfx.init();

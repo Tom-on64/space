@@ -9,7 +9,7 @@ const gfx = {
     /* Input */
     input: {
         keys: {},
-        mouse: { x: 0, y: 0, left: false, middle: false, right: false },
+        mouse: { x: 0, y: 0, cx: 0, cy: 0, left: false, middle: false, right: false },
     },
     /* Methods */
     clear(color = "#000000") {
@@ -100,16 +100,28 @@ _canvas.addEventListener("mousedown", (e) => {
     if (e.button === 0) gfx.input.mouse.left = true;
     else if (e.button === 1) gfx.input.mouse.middle = true;
     else if (e.button === 2) gfx.input.mouse.right = true;
+ 
+    gfx.input.mouse.cx = e.offsetX;
+    gfx.input.mouse.cy = e.offsetY;
 });
 _canvas.addEventListener("mouseup", (e) => {
     if (e.button === 0) gfx.input.mouse.left = false;
     else if (e.button === 1) gfx.input.mouse.middle = false;
     else if (e.button === 2) gfx.input.mouse.right = false;
-
+});
+_canvas.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    let touch = e.touches[0];
+    gfx.input.mouse.left = true;
+    gfx.input.mouse.cx = touch.clientX - _canvas.getBoundingClientRect().left;
+    gfx.input.mouse.cy = touch.clientY - _canvas.getBoundingClientRect().top;
+});
+_canvas.addEventListener("touchend", (e) => {
+    gfx.input.mouse.left = false;
 });
 _canvas.addEventListener("touchmove", (e) => {
     e.preventDefault();
-    var touch = e.touches[0];
+    let touch = e.touches[0];
     gfx.input.mouse.x = touch.clientX - _canvas.getBoundingClientRect().left;
     gfx.input.mouse.y = touch.clientY - _canvas.getBoundingClientRect().top;
 });
