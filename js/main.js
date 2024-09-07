@@ -2,7 +2,7 @@ import Player from "./Player.js";
 import Planet from "./Planet.js";
 
 const loadFont = async () => {
-    const fnt = new FontFace("UbuntuMono", "url(../UbuntuMono-Regular.ttf)", {
+    const fnt = new FontFace("UbuntuMono", "url(UbuntuMono-Regular.ttf)", {
         style: "normal",
         weight: 400,
     });
