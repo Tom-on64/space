@@ -11,7 +11,6 @@ const loadFont = async () => {
 }
 
 let player;
-let thrust = 0;
 const objects = [];
 
 const SPEED = 200;
@@ -29,8 +28,8 @@ const renderUi = () => {
     const fmt = (n) => ((Math.sign(n) == -1 ? '-' : '+') + Math.abs(n.toFixed(0))).padStart(5); // "%+5d" - C equivalent
     const vel = Math.sqrt(player.vx*player.vx + player.vy*player.vy);
 
-    if (thrust) {
-        gfx.text(`THR: ${Math.floor(thrust*100)}%`, 20, textLoc - 24, "#ffffff");
+    if (player.thrust) {
+        gfx.text(`THR: ${Math.floor(player.thrust*100)}%`, 20, textLoc - 24, "#ffffff");
     }
     gfx.text(`POS: <${fmt(player.x)}, ${fmt(player.y)}>`, 20, textLoc, "#ffffff");
     gfx.text(`VEL: ${vel.toFixed(2).padStart(5)}`, 20, textLoc + 24, "#ffffff");
@@ -49,24 +48,25 @@ gfx.start = () => {
 
 gfx.update = (dt) => {
     objects.forEach(o => o.update(player));
-    if    (gfx.input.keys["w"] || gfx.input.keys["ArrowUp"]) player.move(SPEED * dt);
-    if  (gfx.input.keys["s"] || gfx.input.keys["ArrowDown"]) player.move(-SPEED * dt);
-    if  (gfx.input.keys["a"] || gfx.input.keys["ArrowLeft"]) player.rotate(-ROT_SPEED * dt);
-    if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
-
+    
     // Mouse move
     if (gfx.input.mouse.left) {
         const x = gfx.input.mouse.cx - gfx.input.mouse.x;
         const y = gfx.input.mouse.cy - gfx.input.mouse.y;
         const a = Math.PI*2 - Math.atan2(x, y) - Math.PI/2;
-        thrust = Math.sqrt(x*x + y*y);
-        if (thrust > THRUST_RAD) thrust = THRUST_RAD;
-        thrust /= THRUST_RAD;
+        player.thrust = Math.sqrt(x*x + y*y);
+        if (player.thrust > THRUST_RAD) player.thrust = THRUST_RAD;
+        player.thrust /= THRUST_RAD;
 
         player.a = a;
-        player.move(SPEED * dt * thrust);
-    } else { thrust = 0; }
+    } else { player.thrust = 0; }
 
+    if    (gfx.input.keys["w"] || gfx.input.keys["ArrowUp"]) player.thrust = 1;
+    if  (gfx.input.keys["s"] || gfx.input.keys["ArrowDown"]) player.thrust = -1;
+    if  (gfx.input.keys["a"] || gfx.input.keys["ArrowLeft"]) player.rotate(-ROT_SPEED * dt);
+    if (gfx.input.keys["d"] || gfx.input.keys["ArrowRight"]) player.rotate(ROT_SPEED * dt);
+
+    player.move(SPEED * dt * player.thrust);
     player.update(dt);
 }
 

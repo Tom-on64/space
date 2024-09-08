@@ -10,6 +10,7 @@ export default class Player {
         this.a = a * (Math.PI / 180);
         this.vx = 0;
         this.vy = 0;
+        this.thrust = 0;
 
         this.partTimer = 0;
         this.particles = [];
